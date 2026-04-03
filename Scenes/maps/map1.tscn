@@ -1,0 +1,51 @@
+[gd_scene load_steps=5 format=3 uid="uid://c6537n8ohnw7i"]
+
+[ext_resource type="Script" path="res://Scenes/maps/baseMap.gd" id="1_k8s62"]
+[ext_resource type="Script" path="res://Scenes/maps/EnemySpawner.gd" id="2_351sa"]
+[ext_resource type="Texture2D" uid="uid://bmgthan6l3yqt" path="res://Assets/maps/Map1_Path.png" id="2_qvi3q"]
+
+[sub_resource type="Curve2D" id="Curve2D_bs0b4"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -186, -505, 2.17441, -20.9682, -2.17441, 20.9682, -183, -136, -0.612864, -18.3088, 0.612864, 18.3088, -391, -135, -4.01062, -19.7881, 4.01062, 19.7881, -391, 66, 23.3085, -13.8591, -23.3085, 13.8591, -80, 72, 15.7376, 32.1849, -15.7376, -32.1849, -75, -27, -20.4067, -6.5077, 20.4067, 6.5077, 229, -32, -9.03893, 12.4196, 9.03893, -12.4196, 231, 227, -22.0486, -10.0794, 22.0486, 10.0794, -392.626, 230, -17.6389, 13.2292, 17.6389, -13.2292, -389.62, 390, 0, 0, 0, 0, 392.967, 390, 23.9385, -23.3085, -23.9385, 23.3085, 388.959, -235, 0, 0, 0, 0, -21.874, -240, 0, 0, 0, 0, -23.878, -489)
+}
+point_count = 14
+
+[node name="TestMap" type="Node2D"]
+script = ExtResource("1_k8s62")
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(-4.11272e-05, 2.79297)
+scale = Vector2(1.30625, 1.30859)
+texture = ExtResource("2_qvi3q")
+offset = Vector2(0, -5)
+
+[node name="PathSpawner" type="Path2D" parent="."]
+position = Vector2(-1.17041, 0)
+scale = Vector2(0.997972, 1)
+curve = SubResource("Curve2D_bs0b4")
+script = ExtResource("2_351sa")
+
+[node name="SpawnDelay" type="Timer" parent="PathSpawner"]
+wait_time = 0.05
+one_shot = true
+
+[node name="WaveDelayTimer" type="Timer" parent="PathSpawner"]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
+[node name="Turrets" type="Node2D" parent="."]
+
+[node name="Projectiles" type="Node2D" parent="."]
+
+[node name="Obstacles" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Obstacles"]
+position = Vector2(3.76253, -0.203125)
+scale = Vector2(1.01683, 0.999647)
+polygon = PackedVector2Array(-210.225, -472.964, -211.209, -164.855, -411.833, -163.855, -413.799, 95.2367, -50.9059, 100.239, -52.8728, -1.79751, 196.924, -1.79751, 199.874, 198.273, -414.783, 199.273, -411.833, 414.349, 407.382, 414.349, 405.416, -265.891, -3.70026, -270.893, -6.65062, -472.964, -57.7901, -472.964, -54.8397, -209.871, 349.359, -209.871, 355.26, 360.33, -360.693, 358.33, -358.726, 256.294, 250.03, 256.294, 250.03, -56.8169, -105.979, -58.8176, -105.979, 44.2187, -360.693, 42.218, -356.759, -110.836, -150.235, -107.835, -155.152, -470.963)
+
+[connection signal="timeout" from="PathSpawner/SpawnDelay" to="PathSpawner" method="_on_spawn_delay_timeout"]
+[connection signal="timeout" from="PathSpawner/WaveDelayTimer" to="PathSpawner" method="_on_wave_delay_timer_timeout"]
